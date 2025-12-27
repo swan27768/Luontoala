@@ -621,6 +621,36 @@ body {
 body.hide-navbar {
   background: none !important;
 }
+/* GOOGLE SITES - KORJAUS NAPEILLE */
+iframe #passages .intro-nappi,
+iframe #passages .answer-group {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: center !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+}
+
+/* estä Sitesin block-levitys */
+iframe #passages .intro-nappi a,
+iframe #passages .answer-group a {
+  display: inline-flex !important;
+  width: auto !important;
+  min-width: 160px !important;
+  justify-content: center !important;
+  align-items: center !important;
+  text-align: center !important;
+}
+
+/* estä koko rivin leveys */
+iframe #passages .answer-group a,
+iframe #passages .intro-nappi a {
+  max-width: fit-content !important;
+}
+/* Kaikki vaaranapit klikkautuvat kansisivulle */
+a.macro-link.btn--danger {
+  pointer-events: auto;
+}
 </style><script role="script" id="twine-user-script" type="text/twine-javascript">(function () {
   "use strict";
 
@@ -656,7 +686,7 @@ body.hide-navbar {
       exit.textContent = "Poistu";
       exit.onclick = () => {
         if (confirm("Haluatko varmasti poistua tehtävästä?")) {
-          Engine.play("start");
+          Engine.play("Kansi");
         }
       };
 
@@ -666,6 +696,9 @@ body.hide-navbar {
   });
 })();
 
+window.confirmExitStory = function () {
+  SugarCube.Engine.play('Kansi');
+};
 
 
 /* LOMAKKEEN VASTAUSTEN LATAUS TXT-TIEDOSTONA */
@@ -729,6 +762,9 @@ window.confirmExitStory = function () {
     window.close();
   }
 };
+$(document).on('click', 'a.macro-link.btn--danger', function () {
+  SugarCube.Engine.play('Kansi');
+});
 </script><tw-passagedata pid="1" name="StoryInit" tags="" position="825,25" size="100,100">&lt;&lt;set $pisteet = 0&gt;&gt;
 
 
@@ -771,23 +807,16 @@ window.confirmExitStory = function () {
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="3" name="start" tags="" position="600,100" size="100,100">&lt;&lt;script&gt;&gt;
 $(&#39;body&#39;).removeClass(&#39;hide-navbar&#39;);
 &lt;&lt;/script&gt;&gt;
-
 &lt;div class=&quot;quiz-page&quot;&gt;
-  &lt;h1&gt;LUONTO-, YMPÄRISTÖ- JA METSÄALA&lt;/h1&gt;
-  &lt;hr&gt;
-
-  &lt;p&gt;
+    &lt;p&gt;
 &lt;strong&gt;Ympäristöala&lt;/strong&gt; keskittyy ympäristön suojeluun ja hyvinvointiin. Alan ammattilaiset huolehtivat esimerkiksi jätehuollosta, kierrätyksestä, vesien ja maaperän puhdistamisesta sekä ympäristön tilan seurannasta. Tavoitteena on vähentää ihmisen toiminnasta aiheutuvia haittoja luonnolle. Ympäristöalalla voi työskennellä esimerkiksi kunnissa, ympäristöviranomaisilla, tutkimuslaitoksissa ja ympäristöalan yrityksissä.
   &lt;/p&gt;
-
   &lt;p&gt;
 &lt;strong&gt;Luontoala&lt;/strong&gt; liittyy luonnossa toimimiseen, luonnon hoitoon ja ihmisten ohjaamiseen luonnossa. Alan ammattilaiset voivat toimia esimerkiksi luonto-ohjaajina, eräoppaina ja luonnonvaratuottajina. Työssä liikutaan paljon ulkona ja opastetaan ihmisiä toimimaan luonnossa turvallisesti ja vastuullisesti.
   &lt;/p&gt;
-
   &lt;p&gt;
 &lt;strong&gt;Metsäala&lt;/strong&gt; keskittyy metsien hoitoon ja kestävään käyttöön. Metsäalan ammattilaiset huolehtivat metsien istutuksesta, hoidosta, hakkuista ja metsien monimuotoisuuden säilyttämisestä. Alalla työskennellään esimerkiksi metsureina, metsäkoneenkuljettajina ja metsänhoitajina metsänhoitoyhdistyksissä, yrityksissä ja Metsähallituksella.
   &lt;/p&gt;
-
   &lt;div class=&quot;intro-nappi&quot;&gt;
     [[Sopiiko luonto-, ympäristö- tai metsäala sinulle? – Testaa tästä-&gt;Ammattitesti: alku]]
   &lt;/div&gt;
@@ -1130,11 +1159,11 @@ Tässä on esimerkkejä kouluista ja linkit, joista voit lukea lisää.
 &lt;div class=&quot;intro-nappi&quot;&gt;
   [[Palaa alkuun-&gt;start]]
   
-  &lt;a href=&quot;javascript:void(0)&quot;
-     class=&quot;macro-link btn--danger&quot;
-     onclick=&quot;window.close();&quot;&gt;
-     Poistu
-  &lt;/a&gt;
+&lt;a class=&quot;macro-link btn--danger&quot; href=&quot;javascript:void(0)&quot;
+   onclick=&quot;SugarCube.Engine.play(&#39;Kansi&#39;)&quot;&gt;
+   Poistu
+&lt;/a&gt;
+
 &lt;/div&gt;
 </tw-passagedata><tw-passagedata pid="29" name="Esitelmäpohja" tags="" position="925,575" size="100,100">&lt;h2&gt;Esitelmä ammatista: &lt;&lt;print $ammatti&gt;&gt;&lt;/h2&gt;
 
