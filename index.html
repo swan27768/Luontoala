@@ -538,57 +538,7 @@ a.macro-link.btn--danger {
 
   box-sizing: border-box !important;
 }
-/* Ammattitutkimuksen lomakkeen kirjoitustekstin väri */
 
-#passages .lomake-ryhma tex/* KANSISIVU – julistemainen, varma yliajo */
-#passages .passage .cover-link {
-  display: flex !important;
-  min-height: 100vh !important;
-  width: 100% !important;
-
-  justify-content: center !important;
-  align-items: center !important;
-  text-align: center !important;
-
-  background: var(--bg-body) !important;
-  color: var(--text-main) !important;
-
-  text-decoration: none !important;
-  cursor: pointer !important;
-  box-sizing: border-box !important;
-  padding: 2.5rem 1.5rem !important;
-}
-
-#passages .passage .cover-inner {
-  max-width: 900px !important;
-}
-
-#passages .passage .cover-title {
-  font-family: "Segoe UI", Arial, sans-serif;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  line-height: 0.95;
-
-  font-size: clamp(1rem, 5vw, 4rem);   /* pienempi kuin ennen */
-  color: #2F5D3A;
-
-  margin: 0;
-  padding: 0;
-
-  background: none;
-  border: none;
-  box-shadow: none;
-}
-
-#passages .passage .cover-subtitle {
-  font-size: clamp(1.1rem, 2.8vw, 1.6rem) !important;
-  margin-top: 1.6rem !important;
-}
-
-#passages .passage .cover-hint {
-  margin-top: 2.6rem !important;
-  opacity: 0.75 !important;
-}
 tarea,
 #passages .lomake-ryhma input[type="text"] {
   color: #000000 !important;
@@ -621,36 +571,55 @@ body {
 body.hide-navbar {
   background: none !important;
 }
-/* GOOGLE SITES - KORJAUS NAPEILLE */
-iframe #passages .intro-nappi,
-iframe #passages .answer-group {
+
+/* KANSISIVUN OTSIKKO – LOPULLINEN KOKO */
+#passages .passage .cover-title {
+  font-family: "Segoe UI", Arial, sans-serif !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.12em !important;
+  line-height: 1.05 !important;
+
+  font-size: clamp(1.8rem, 3.8vw, 3rem) !important;  /* SELKEÄ ja maltillinen */
+  color: #2F5D3A !important;
+
+  margin: 0 !important;
+  padding: 0 !important;
+
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+
+/* ==============================
+   NAPPIKORJAUS – GOOGLE SITES SAFE
+   ============================== */
+
+.intro-nappi,
+.answer-group {
   display: flex !important;
   flex-direction: row !important;
   justify-content: center !important;
   align-items: center !important;
+  gap: 0.75rem !important;
   flex-wrap: wrap !important;
 }
 
-/* estä Sitesin block-levitys */
-iframe #passages .intro-nappi a,
-iframe #passages .answer-group a {
+.intro-nappi a,
+.answer-group a {
   display: inline-flex !important;
-  width: auto !important;
-  min-width: 160px !important;
-  justify-content: center !important;
   align-items: center !important;
+  justify-content: center !important;
   text-align: center !important;
+
+  width: auto !important;
+  min-width: 140px !important;
+  max-width: none !important;
+
+  white-space: nowrap !important;
 }
 
-/* estä koko rivin leveys */
-iframe #passages .answer-group a,
-iframe #passages .intro-nappi a {
-  max-width: fit-content !important;
-}
-/* Kaikki vaaranapit klikkautuvat kansisivulle */
-a.macro-link.btn--danger {
-  pointer-events: auto;
-}
+
 </style><script role="script" id="twine-user-script" type="text/twine-javascript">(function () {
   "use strict";
 
@@ -804,10 +773,7 @@ $(document).on('click', 'a.macro-link.btn--danger', function () {
 &lt;&lt;link &quot;EI&quot;&gt;&gt;
   &lt;&lt;goto &quot;Kysymys 2&quot;&gt;&gt;
 &lt;&lt;/link&gt;&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="3" name="start" tags="" position="600,100" size="100,100">&lt;&lt;script&gt;&gt;
-$(&#39;body&#39;).removeClass(&#39;hide-navbar&#39;);
-&lt;&lt;/script&gt;&gt;
-&lt;div class=&quot;quiz-page&quot;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="3" name="start" tags="" position="600,100" size="100,100">&lt;div class=&quot;quiz-page&quot;&gt;
     &lt;p&gt;
 &lt;strong&gt;Ympäristöala&lt;/strong&gt; keskittyy ympäristön suojeluun ja hyvinvointiin. Alan ammattilaiset huolehtivat esimerkiksi jätehuollosta, kierrätyksestä, vesien ja maaperän puhdistamisesta sekä ympäristön tilan seurannasta. Tavoitteena on vähentää ihmisen toiminnasta aiheutuvia haittoja luonnolle. Ympäristöalalla voi työskennellä esimerkiksi kunnissa, ympäristöviranomaisilla, tutkimuslaitoksissa ja ympäristöalan yrityksissä.
   &lt;/p&gt;
@@ -821,7 +787,9 @@ $(&#39;body&#39;).removeClass(&#39;hide-navbar&#39;);
     [[Sopiiko luonto-, ympäristö- tai metsäala sinulle? – Testaa tästä-&gt;Ammattitesti: alku]]
   &lt;/div&gt;
 &lt;/div&gt;
-</tw-passagedata><tw-passagedata pid="4" name="Ammattitesti: alku" tags="" position="400,325" size="100,100">
+&lt;&lt;script&gt;&gt;
+$(&#39;body&#39;).removeClass(&#39;hide-navbar&#39;);
+&lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="4" name="Ammattitesti: alku" tags="" position="400,325" size="100,100">
 &lt;h1&gt;Luontoala – sopiiko se minulle?&lt;/h1&gt;
 
 &lt;p&gt;
