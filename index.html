@@ -665,60 +665,32 @@ body.hide-navbar {
 .btn-primary {
   background: linear-gradient(#3F7E59, #2F5D3A) !important;
 }
-</style><script role="script" id="twine-user-script" type="text/twine-javascript">(function () {
-  "use strict";
+</style><script role="script" id="twine-user-script" type="text/twine-javascript">/* ========= NAVBAR ========= */
+$(document).on(":passagestart", function (event) {
+  if (!event || !event.passage) return;
+  const tags = event.passage.tags || [];
 
-  $(document).on(":passagestart", function (event) {
-    if (!event || !event.passage) return;
+  if (tags.includes("cover")) document.body.classList.add("hide-navbar");
+  else document.body.classList.remove("hide-navbar");
 
-    const body = document.body;
-    const name = event.passage.name;
-    const tags = event.passage.tags || [];
+  if (!document.querySelector(".navbar-fixed")) {
+    const nav = document.createElement("div");
+    nav.className = "navbar-fixed";
 
-    /* KANSISIVU */
-    if (tags.includes("cover")) {
-      body.classList.add("hide-navbar");
-      return;
-    }
+    const back = document.createElement("button");
+    back.className = "btn";
+    back.textContent = "← Takaisin";
+    back.onclick = () => Engine.backward();
 
-    /* MUUT SIVUT */
-    body.classList.remove("hide-navbar");
+    const exit = document.createElement("button");
+    exit.className = "btn btn--danger";
+    exit.textContent = "Poistu";
+    exit.onclick = () => Engine.play("Kansi");
 
-    if (!document.querySelector(".navbar-fixed")) {
-      const nav = document.createElement("div");
-      nav.className = "navbar-fixed";
-
-      const back = document.createElement("button");
-      back.className = "btn";
-      back.textContent = "← Takaisin";
-     back.onclick = () => {
-      if (State.length > 1) {
-        Engine.backward();
-      } else {
-        Engine.play("Kansi");
-      }
-    };
-
-
-      const exit = document.createElement("button");
-      exit.className = "btn btn--danger";
-      exit.textContent = "Poistu";
-      exit.onclick = () => {
-        if (confirm("Haluatko varmasti poistua tehtävästä?")) {
-          Engine.play("Kansi");
-        }
-      };
-
-      nav.append(back, exit);
-      document.body.appendChild(nav);
-    }
-  });
-})();
-
-window.confirmExitStory = function () {
-  SugarCube.Engine.play('Kansi');
-};
-
+    nav.append(back, exit);
+    document.body.appendChild(nav);
+  }
+});
 
 (function () {
   "use strict";
