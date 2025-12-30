@@ -618,8 +618,53 @@ body.hide-navbar {
 
   white-space: nowrap !important;
 }
+/* ESITELMÄPOHJA – kirjoitusteksti mustaksi */
+#passages .lomake-ryhma textarea,
+#passages .lomake-ryhma input,
+#passages .lomake-ryhma select {
+  color: #000000 !important;
+}
 
 
+/* ESITELMÄPOHJA – kirjoitusteksti mustaksi */
+#passages .lomake-ryhma textarea,
+#passages .lomake-ryhma input,
+#passages .lomake-ryhma select {
+  color: #000000 !important;
+}
+/* ============================
+   INFO-TEXT – OPETUSKORTTI
+   ============================ */
+
+#passages .info-text {
+  background: #ffffff;
+  border: 1px solid #BFD3C4;
+  border-radius: 14px;
+  padding: 0.9rem 1.1rem;
+  margin: 1.2rem auto;
+  max-width: 720px;
+  text-align: center;
+}
+
+#passages .info-text p {
+  margin: 0 0 0.6rem 0;
+  font-size: 0.95rem;
+  color: #1E2A1E;
+}
+/* TOIMINTORIVI ESITELMÄPOHJAAN */
+.action-row {
+  justify-content: center !important;
+  gap: 1rem !important;
+}
+
+.action-row a {
+  min-width: 200px !important;
+}
+
+/* PÄÄTOIMINTONAPPI */
+.btn-primary {
+  background: linear-gradient(#3F7E59, #2F5D3A) !important;
+}
 </style><script role="script" id="twine-user-script" type="text/twine-javascript">(function () {
   "use strict";
 
@@ -646,9 +691,14 @@ body.hide-navbar {
       const back = document.createElement("button");
       back.className = "btn";
       back.textContent = "← Takaisin";
-      back.onclick = () => {
-        if (State.length > 0) Engine.backward();
-      };
+     back.onclick = () => {
+      if (State.length > 1) {
+        Engine.backward();
+      } else {
+        Engine.play("Kansi");
+      }
+    };
+
 
       const exit = document.createElement("button");
       exit.className = "btn btn--danger";
@@ -670,59 +720,79 @@ window.confirmExitStory = function () {
 };
 
 
-/* LOMAKKEEN VASTAUSTEN LATAUS TXT-TIEDOSTONA */
+(function () {
+  "use strict";
 
-window.downloadAmmattitutkimus = function () {
-  const v = State.variables;
+  const AUTOSAVE_KEY = "luonto_ammatti_autosave_v1";
 
-  const lines = [
-    "AMMATTITUTKIMUS – VASTAUKSET",
-    "==============================",
-    "",
-    "Valittu ammatti:",
-    (v.ammattiNimi || ""),
-    "",
-    "KOULUTUSPOLKU AMMATTIIN:",
-    (v.koulutusPolku || ""),
-    "",
-    "TYÖTEHTÄVÄT:",
-    (v.tyotehtavat || ""),
-    "",
-    "MAHDOLLISET TYÖPAIKAT:",
-    (v.tyopaikat || ""),
-    "",
-    "AMMATISSA TARVITTAVAT VAHVUUDET:",
-    (v.vahvuudet || ""),
-    "",
-    "HYVÄT PUOLET:",
-    (v.hyvatPuolet || ""),
-    "",
-    "HAASTEET:",
-    (v.haasteet || ""),
-    "",
-    "PALKKAUS:",
-    (v.palkkaus || ""),
-    "",
-    "OMA YHTEENVETO:",
-    (v.yhteenvetoOmaNakyma || ""),
-    "",
-    "------------------------------",
-    "Luotu interaktiivisesta ammattitutkimus-tehtävästä."
-  ].join("\n");
+  /* ========= LATAA TXT ========= */
+  window.downloadAmmattitutkimus = function () {
+    const v = State.variables;
 
-  const blob = new Blob([lines], { type: "text/plain;charset=utf-8" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
+    const text =
+`ESITELMÄ AMMATISTA: ${v.ammatti || ""}
 
-  a.href = url;
-  a.download = "ammattitutkimus_vastaukset.txt";
+1. MITÄ TÄSSÄ TYÖSSÄ TEHDÄÄN:
+${v.tyotehtavat || ""}
 
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-};
+2. MISSÄ TÖITÄ TEHDÄÄN:
+${v.tyopaikat || ""}
 
+3. MILLAISTA TYÖAIKA ON:
+${v.tyoajat || ""}
+
+4. MISSÄ TÄTÄ AMMATTIA VOI OPISKELLA:
+${v.opiskelupaikat || ""}
+
+5. MIKSI TÄMÄ AMMATTI KIINNOSTAA MINUA:
+${v.omaPerustelu || ""}
+
+------------------------------
+Luonto-, ympäristö- ja metsäalan ammattitehtävä.`;
+
+    const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = (v.ammatti || "luontoala") + "_esitelma.txt";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  /* ========= AUTOSAVE ========= */
+  window.initAmmattiAutosave = function () {
+    const fields = document.querySelectorAll("#passages .lomake-ryhma textarea");
+    if (!fields.length) return;
+
+    let saved = [];
+    try { saved = JSON.parse(localStorage.getItem(AUTOSAVE_KEY) || "[]"); } catch(e){}
+
+    fields.forEach((f,i) => f.value = saved[i] || "");
+
+    fields.forEach((field,i)=>{
+      field.addEventListener("input", ()=>{
+        const data = Array.from(fields).map(f=>f.value);
+        localStorage.setItem(AUTOSAVE_KEY, JSON.stringify(data));
+        ["tyotehtavat","tyopaikat","tyoajat","opiskelupaikat","omaPerustelu"]
+          .forEach((k,j)=> State.variables[k] = data[j] || "");
+      });
+    });
+  };
+
+  /* ========= TYHJENNÄ ========= */
+  window.resetAmmattitutkimus = function () {
+    document.querySelectorAll("#passages textarea").forEach(t=>t.value="");
+    ["tyotehtavat","tyopaikat","tyoajat","opiskelupaikat","omaPerustelu","ammatti"]
+      .forEach(k=>State.variables[k]="");
+    localStorage.removeItem(AUTOSAVE_KEY);
+    alert("Vastaukset tyhjennetty.");
+  };
+
+})();
+
+  
 /* Poistu-painike (sulje välilehti) */
 
 window.confirmExitStory = function () {
@@ -754,14 +824,7 @@ Engine.play(&quot;start&quot;);
 &lt;&lt;set $palkkaus = &quot;&quot;&gt;&gt;
 &lt;&lt;set $yhteenvetoOmaNakyma = &quot;&quot;&gt;&gt;
 
-/* Videolinkit – TÄYTÄ ALAN MUKAAN (Google Drive /preview-linkit tms.) */
-&lt;&lt;set $videos to {
-  osa1: {
-    intro: &quot;ANNA_INTROVIDEON_LINKKI_TAHAN&quot;
-  },
-  osa2: {},
-  osa3: {}
-}&gt;&gt;
+
 </tw-passagedata><tw-passagedata pid="2" name="Kysymys 1" tags="" position="400,450" size="100,100">&lt;h2&gt;1 / 10&lt;/h2&gt;
 &lt;p&gt;Pidätkö ulkona työskentelystä säästä riippumatta?&lt;/p&gt;
 
@@ -1047,7 +1110,10 @@ $(&#39;body&#39;).addClass(&#39;hide-navbar&#39;);
 [[Jatka-&gt;Ammatti 4]]
 &lt;/div&gt;
 </tw-passagedata><tw-passagedata pid="26" name="Ammattitehtävä" tags="" position="850,475" size="100,100">&lt;h1&gt;Valitse ammatti&lt;/h1&gt;
-
+&lt;div class=&quot;info-text&quot;&gt;
+  &lt;p&gt;&lt;strong&gt;Tutustu ensin SOTE-alan koulutuksiin ennen kuin aloitat oman ammattitehtäväsi.&lt;/strong&gt;&lt;/p&gt;
+  &lt;div class=&quot;intro-nappi&quot;&gt;[[Tutustu SOTE-alan koulutuksiin-&gt;Oppilaitokset]]&lt;/div&gt;
+&lt;/div&gt;
 &lt;h2&gt;Luontoalan ammatit&lt;/h2&gt;
 &lt;div class=&quot;answer-group&quot;&gt;
 &lt;&lt;link &quot;Luonto-ohjaaja&quot;&gt;&gt;&lt;&lt;set $ammatti=&quot;Luonto-ohjaaja&quot;&gt;&gt;&lt;&lt;goto &quot;Esitelmäpohja&quot;&gt;&gt;&lt;&lt;/link&gt;&gt;
@@ -1071,18 +1137,29 @@ $(&#39;body&#39;).addClass(&#39;hide-navbar&#39;);
 &lt;&lt;link &quot;Ympäristötarkastaja&quot;&gt;&gt;&lt;&lt;set $ammatti=&quot;Ympäristötarkastaja&quot;&gt;&gt;&lt;&lt;goto &quot;Esitelmäpohja&quot;&gt;&gt;&lt;&lt;/link&gt;&gt;
 &lt;&lt;link &quot;Jätehuollon työntekijä&quot;&gt;&gt;&lt;&lt;set $ammatti=&quot;Jätehuollon työntekijä&quot;&gt;&gt;&lt;&lt;goto &quot;Esitelmäpohja&quot;&gt;&gt;&lt;&lt;/link&gt;&gt;
 &lt;/div&gt;
-</tw-passagedata><tw-passagedata pid="27" name="Loppu" tags="" position="950,775" size="100,100">
-&lt;h2&gt;Hyvä!&lt;/h2&gt;
+</tw-passagedata><tw-passagedata pid="27" name="Loppu" tags="" position="1000,700" size="100,100">
+&lt;h2&gt;Hyvä homma!&lt;/h2&gt;
 
 &lt;p&gt;
 Olet pohtinut omaa kiinnostustasi palvelualan ammatteihin. Voit näyttää vastauksesi opettajalle tai jatkaa keskustelua opinto-ohjaajan kanssa. 
 &lt;/p&gt;
 
-&lt;div class=&quot;intro-nappi&quot;&gt;
-  [[Tutustu koulutuksiin-&gt;Oppilaitokset]]
-  
-  
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="28" name="Oppilaitokset" tags="" position="850,300" size="100,100">&lt;h2&gt;Luonto-, ympäristö- ja metsäalan koulutukset&lt;/h2&gt;
+&lt;div class=&quot;info-text&quot;&gt;
+  &lt;p&gt;&lt;strong&gt;Muista tyhjentää tehtäväsivu ennen kuin poistut.&lt;/strong&gt;&lt;/p&gt;
+  &lt;div class=&quot;intro-nappi action-row&quot;&gt;
+    &lt;a class=&quot;macro-link btn-secondary&quot;
+       href=&quot;javascript:void(0)&quot;
+       onclick=&quot;resetAmmattitutkimus()&quot;&gt;
+       Tyhjennä
+    &lt;/a&gt;
+    &lt;&lt;link &quot;Poistu&quot;&gt;&gt;
+      &lt;&lt;goto &quot;Kansi&quot;&gt;&gt;
+    &lt;&lt;/link&gt;&gt;
+
+  &lt;/div&gt;
+&lt;/div&gt;
+
+</tw-passagedata><tw-passagedata pid="28" name="Oppilaitokset" tags="" position="850,300" size="100,100">&lt;h2&gt;Luonto-, ympäristö- ja metsäalan koulutukset&lt;/h2&gt;
 
 &lt;p&gt;
 Luonto-, ympäristö- ja metsäalan ammatteihin voi opiskella monissa oppilaitoksissa.
@@ -1134,7 +1211,10 @@ Tässä on esimerkkejä kouluista ja linkit, joista voit lukea lisää.
 &lt;/a&gt;
 
 &lt;/div&gt;
-</tw-passagedata><tw-passagedata pid="29" name="Esitelmäpohja" tags="" position="925,575" size="100,100">&lt;h2&gt;Esitelmä ammatista: &lt;&lt;print $ammatti&gt;&gt;&lt;/h2&gt;
+</tw-passagedata><tw-passagedata pid="29" name="Esitelmäpohja" tags="" position="925,575" size="100,100">&lt;&lt;script&gt;&gt;
+setTimeout(initAmmattiAutosave, 100);
+&lt;&lt;/script&gt;&gt;
+&lt;h2&gt;Esitelmä ammatista: &lt;&lt;print $ammatti&gt;&gt;&lt;/h2&gt;
 
 &lt;p&gt;Täytä alle tiedot valitsemastasi ammatista.&lt;/p&gt;
 &lt;p&gt;Vastaa kohtiin mahdollisimman konkreettisesti ja &lt;strong&gt;omin sanoin&lt;/strong&gt;. &lt;br&gt;
@@ -1157,15 +1237,23 @@ Lopuksi saat vastauksistasi yhteenvedon, jonka voit ladata tiedostona ja kopioid
 &lt;textarea placeholder=&quot;Omat ajatukset...&quot;&gt;&lt;/textarea&gt;
 &lt;/div&gt;
 
-&lt;div class=&quot;intro-nappi&quot;&gt;
+&lt;div class=&quot;intro-nappi action-row&quot;&gt;
 
-&lt;a href=&quot;javascript:void(0)&quot;
-   class=&quot;macro-link&quot;
+&lt;a class=&quot;macro-link btn-primary&quot;
+   href=&quot;javascript:void(0)&quot;
    onclick=&quot;downloadAmmattitutkimus()&quot;&gt;
-  Lataa vastaukset tiedostona
+   Lataa vastaukset
 &lt;/a&gt;
 
-[[Valmis-&gt;Loppu]]
+&lt;a class=&quot;macro-link btn-secondary&quot;
+   href=&quot;javascript:void(0)&quot;
+   onclick=&quot;resetAmmattitutkimus()&quot;&gt;
+   Tyhjennä
+&lt;/a&gt;
+
+&lt;&lt;link &quot;Valmis&quot;&gt;&gt;
+  &lt;&lt;goto &quot;Loppu&quot;&gt;&gt;
+&lt;&lt;/link&gt;&gt;
 
 &lt;/div&gt;
 </tw-passagedata><tw-passagedata pid="30" name="Ammatti 4" tags="" position="600,975" size="100,100">&lt;h2&gt;Kuka neuvoo ihmisiä lajittelussa ja ympäristöasioissa?&lt;/h2&gt;
