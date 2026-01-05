@@ -625,13 +625,6 @@ body.hide-navbar {
   color: #000000 !important;
 }
 
-
-/* ESITELMÄPOHJA – kirjoitusteksti mustaksi */
-#passages .lomake-ryhma textarea,
-#passages .lomake-ryhma input,
-#passages .lomake-ryhma select {
-  color: #000000 !important;
-}
 /* ============================
    INFO-TEXT – OPETUSKORTTI
    ============================ */
@@ -664,6 +657,39 @@ body.hide-navbar {
 /* PÄÄTOIMINTONAPPI */
 .btn-primary {
   background: linear-gradient(#3F7E59, #2F5D3A) !important;
+}
+/* ======================================
+   SAAVUTETTAVUUS – LUETTAVUUSKORJAUS
+   ====================================== */
+
+/* Perusteksti isommaksi ja selkeämmäksi */
+#passages .passage p,
+#passages .passage li,
+#passages .passage span,
+#passages .passage div {
+  font-size: 18px !important;
+  line-height: 1.85 !important;
+}
+
+/* Lomakekenttien teksti */
+#passages textarea,
+#passages input,
+#passages select {
+  font-size: 18px !important;
+  line-height: 1.6 !important;
+}
+
+/* Otsikot suhteessa uuteen kokoon */
+#passages .passage h1 { font-size: 2.4rem !important; }
+#passages .passage h2 { font-size: 1.8rem !important; }
+#passages .passage h3 { font-size: 1.4rem !important; }
+
+/* Napit helpommin luettaviksi */
+.intro-nappi a,
+.answer-group a,
+.navbar-fixed .btn {
+  font-size: 1.05rem !important;
+  padding: 0.9rem 1.7rem !important;
 }
 </style><script role="script" id="twine-user-script" type="text/twine-javascript">/* ========= NAVBAR ========= */
 $(document).on(":passagestart", function (event) {
@@ -1083,7 +1109,7 @@ $(&#39;body&#39;).addClass(&#39;hide-navbar&#39;);
 &lt;/div&gt;
 </tw-passagedata><tw-passagedata pid="26" name="Ammattitehtävä" tags="" position="850,475" size="100,100">&lt;h1&gt;Valitse ammatti&lt;/h1&gt;
 &lt;div class=&quot;info-text&quot;&gt;
-  &lt;p&gt;&lt;strong&gt;Tutustu ensin SOTE-alan koulutuksiin ennen kuin aloitat oman ammattitehtäväsi.&lt;/strong&gt;&lt;/p&gt;
+  &lt;p&gt;&lt;strong&gt;Tutustu ensin Luontoalan koulutuksiin ennen kuin aloitat oman ammattitehtäväsi.&lt;/strong&gt;&lt;/p&gt;
   &lt;div class=&quot;intro-nappi&quot;&gt;[[Tutustu SOTE-alan koulutuksiin-&gt;Oppilaitokset]]&lt;/div&gt;
 &lt;/div&gt;
 &lt;h2&gt;Luontoalan ammatit&lt;/h2&gt;
@@ -1134,8 +1160,7 @@ Olet pohtinut omaa kiinnostustasi palvelualan ammatteihin. Voit näyttää vasta
 </tw-passagedata><tw-passagedata pid="28" name="Oppilaitokset" tags="" position="850,300" size="100,100">&lt;h2&gt;Luonto-, ympäristö- ja metsäalan koulutukset&lt;/h2&gt;
 
 &lt;p&gt;
-Luonto-, ympäristö- ja metsäalan ammatteihin voi opiskella monissa oppilaitoksissa.
-Tässä on esimerkkejä kouluista ja linkit, joista voit lukea lisää.
+Luonto-, ympäristö- ja metsäalan ammatteihin voi opiskella monissa oppilaitoksissa. Tällä sivulla listatut koulutukset ja oppilaitokset ovat esimerkkejä. Koulutustarjonta ja hakukohteet voivat muuttua. Varmista ajantasaiset tiedot aina omalta opinto-ohjaajaltasi sekä oppilaitosten omilta verkkosivuilta.
 &lt;/p&gt;
 
 &lt;div class=&quot;school-card&quot;&gt;
